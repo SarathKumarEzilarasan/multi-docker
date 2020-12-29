@@ -1,21 +1,21 @@
 language: generic 
 sudo: required
 services:
-  - docker
+ - docker
 
 before_install:
-  - docker image build -t sarathezil/react-test -f ./client/Dockerfile.dev ./client
+ - docker image build -t sarathezil/react-test -f ./client/Dockerfile.dev ./client
   
 script:
-  - docker run -e CI=true sarathezil/react-test npm test  -- --coverage
+ - docker run -e CI=true sarathezil/react-test npm test  -- --coverage
   
  after_success:
-  - docker image build -t sarathezil/multi-client ./client
-  - docker image build -t sarathezil/multi-nginx ./nginx
-  - docker image build -t sarathezil/multi-server ./server
-  - docker image build -t sarathezil/multi-worker ./worker
-  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
-  - docker push sarathezil/multi-client
-  - docker push sarathezil/multi-nginx
-  - docker push sarathezil/multi-server
-  - docker push sarathezil/multi-worker
+ - docker image build -t sarathezil/multi-client ./client
+ - docker image build -t sarathezil/multi-nginx ./nginx
+ - docker image build -t sarathezil/multi-server ./server
+ - docker image build -t sarathezil/multi-worker ./worker
+ - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+ - docker push sarathezil/multi-client
+ - docker push sarathezil/multi-nginx
+ - docker push sarathezil/multi-server
+ - docker push sarathezil/multi-worker
