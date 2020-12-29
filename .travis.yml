@@ -1,21 +1,24 @@
-language: generic 
 sudo: required
+language: generic
+
 services:
- - docker
+  - docker
 
 before_install:
- - docker image build -t sarathezil/react-test -f ./client/Dockerfile.dev ./client
-  
+  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
+
 script:
- - docker run -e CI=true sarathezil/react-test npm test  -- --coverage
-  
- after_success:
- - docker image build -t sarathezil/multi-client ./client
- - docker image build -t sarathezil/multi-nginx ./nginx
- - docker image build -t sarathezil/multi-server ./server
- - docker image build -t sarathezil/multi-worker ./worker
- - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
- - docker push sarathezil/multi-client
- - docker push sarathezil/multi-nginx
- - docker push sarathezil/multi-server
- - docker push sarathezil/multi-worker
+  - docker run -e CI=true stephengrider/react-test npm test
+
+after_success:
+  - docker build -t stephengrider/multi-client ./client
+  - docker build -t stephengrider/multi-nginx ./nginx
+  - docker build -t stephengrider/multi-server ./server
+  - docker build -t stephengrider/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push stephengrider/multi-client
+  - docker push stephengrider/multi-nginx
+  - docker push stephengrider/multi-server
+  - docker push stephengrider/multi-worker
